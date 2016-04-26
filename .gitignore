@@ -1,0 +1,6 @@
+*.pyc
+*.db
+*.log
+*.csv
+*.xls.+
+database_details.py
