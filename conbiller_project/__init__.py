@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author: root
 # @Date:   2016-04-25 18:13:56
-# @Last Modified by:   root
-# @Last Modified time: 2016-04-25 22:20:37
+# @Last Modified by:   kurohai
+# @Last Modified time: 2016-04-26 08:13:14
 
 from dicto import dicto
 from pprint import pprint
@@ -15,9 +15,11 @@ import logging
 from flask import Flask
 from flask.ext.admin import Admin
 from sqlalchemy.ext.declarative import *
-
+from app import admin, flaskapp, flasktemplate
 import settings
 from database import database_connection
+from models_old import ConBillInvoiceMapper, ConBillProductMapper
+
 
 # settings
 pwd = settings.pwd
@@ -36,9 +38,8 @@ formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(messag
 handler.setFormatter(formatter)
 log.addHandler(handler)
 
-flasktemplate = Flask(__name__)
-
-from models_old import ConBillInvoiceMapper, ConBillProductMapper
 
 db = database_connection(dburi)
 from models import *
+
+

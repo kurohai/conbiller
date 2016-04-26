@@ -3,12 +3,12 @@ import cherrypy
 from cherrypy import wsgiserver
 from cherrypy.process.plugins import Daemonizer,PIDFile
 from flask.ext.script import Command, Manager, Option
-from conbiller_project import flasktemplate, database_connection, dburi
+from conbiller_project import flaskapp, database_connection, dburi
 from conbiller_project import ConBillProduct, ConBillInvoice
 from conbiller_project.util import get_invoices
 from pprint import pprint
 
-manager = Manager(flasktemplate)
+manager = Manager(flaskapp)
 
 
 
@@ -44,11 +44,13 @@ def mcnexport(major_cust=None, target_date=None):
         # print 'invoice count', len(invoices)
 
         for invoice in invoices:
-            with open('./output/{mcn}/{cust}.txt'.format(mcn=invoice.major_cust_code, cust=invoice.cust_no), 'a') as f:
-            # print invoice
+            dirpath = './output/{mcn}'.format(mcn=invoice.major_cust_code)
+            check_dir_exist(dirpath)
+            filename = '{cust}.txt'.format(cust=invoice.cust_no)
+            filepath = os.path.join(dirpath, filename)
 
+            with open(filepath, 'a') as f:
                 products = db.session.query(ConBillProduct).filter(ConBillProduct.conbillinvoice_id == invoice.id).all()
-                # print 'pcount:', len(products)
                 for p in products:
                     f.write(p.export()+'\n')
 
@@ -81,8 +83,8 @@ def data(db):
 
 @manager.command
 def quick():
-    d = wsgiserver.WSGIPathInfoDispatcher({'/': flasktemplate})
-    server = wsgiserver.CherryPyWSGIServer(('0.0.0.0', 80), d, server_name=flasktemplate.appname, )
+    d = wsgiserver.WSGIPathInfoDispatcher({'/': flaskapp})
+    server = wsgiserver.CherryPyWSGIServer(('0.0.0.0', 80), d, server_name=flaskapp.appname, )
     try:
         server.start()
     except KeyboardInterrupt:
@@ -91,9 +93,11 @@ def quick():
 
 @manager.command
 def go():
-    flasktemplate.run(debug=True, host='0.0.0.0', port=80)
+    flaskapp.run(debug=True, host='0.0.0.0', port=80)
 
-
+def check_dir_exist(dirpath):
+    if not os.path.isdir(dirpath):
+        os.mkdir(dirpath)
 
 if __name__ == '__main__':
     manager.run()
