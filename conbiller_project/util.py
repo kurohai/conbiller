@@ -5,6 +5,10 @@
 import csv
 from dicto import dicto
 
+sdms_file_field_lengths = (5, 6, 3, 6, 12, 8, 23, 7, 12, 5, 1, 9, 5, 5, 7, 24, 4, 7, 3, 48, 30)
+
+def export_invoice(invoice):
+    pass
 
 def get_conbill_prices(infile):
     cbprices = list()

@@ -42,3 +42,65 @@ A database for ConBill invoices. This will help fix ConBill invoicing errors by 
 ## TODO
 
 - Migrate flat file field locations out of model to file_definition file
+
+
+
+# ConBill Late Invoices Project
+
+## Overview
+
+Cleaning up the backlog of ConBill invoices while correcting errors.
+The database will speed up the recovery by a considerable amount.
+
+## Current Status
+
+Parsing all files again to populate a database. Will be completed tonight.
+
+## Next Steps
+
+### Non Dollar Chain
+Export one file for each major customer number for each day.
+
+### Dollar Chain
+> MCN 375, 368
+1. Export one file for each customer number for each day/ week.
+1. Change every price to ConBill's price if product is authorized.
+1. If product is unauthorized leave price unchanged.
+
+
+
+```
+if brprice == cbprice:
+    write line with brprice
+elif brprice != cbprice and cbprice != 0.0:
+    write line with cbprice
+elif brprice != cbprice and cbprice == 0.0:
+    write line with brprice
+```
+
+
+
+
+### SDMS Flat File Definitions
+
+1. pepsi div id: 5
+1. date: 6
+1. filler zero: 3
+1. customer number: 6
+1. filler space: 12
+1. invoice: 8
+1. filler space: 23
+1. filler zero: 7
+1. filler space: 12
+1. quantity: 5
+1. credit or debit: 1
+1. filler space: 9
+1. filler zero: 5
+1. filler space: 5
+1. price: 7
+1. filler zero: 24
+1. brand: 4
+1. filler zero: 7
+1. pack id: 3
+1. filler zero: 48
+1. filler space: 30
