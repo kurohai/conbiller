@@ -17,6 +17,7 @@ class ConBillProduct(Base):
     line = Column(String(length=15))
     cord = Column(String(length=15))
     pcode = Column(Integer)
+    conbillinvoice_id = Column(Integer, ForeignKey('conbillinvoice.id'))
 
     def __init__(self, product=None):
         if product != None:
@@ -30,9 +31,6 @@ class ConBillProduct(Base):
             self.cord = product.cord
             self.pcode = product.pcode
 
-        # super(ConBillProduct, self).__init__()
-
-
     def __repr__(self):
         return '{self.id}\t {self.pcode}'.format(self=self)
 
@@ -45,7 +43,13 @@ class ConBillInvoice(Base):
     cust_no = Column(String(length=15))
     invoice_no = Column(String(length=15))
     data = Column(Text)
-    # products = relationship()
+
+    conbillproducts = relationship(
+        'ConBillProduct',
+        backref='conbillinvoice',
+        primaryjoin="ConBillInvoice.id==ConBillProduct.conbillinvoice_id",
+    )
+
     total_invoice_price = Column(Float)
     final_billed_price = Column(Float)
     total_diff = Column(Float)

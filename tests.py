@@ -2,7 +2,7 @@
 # @Author: root
 # @Date:   2016-04-25 18:20:17
 # @Last Modified by:   root
-# @Last Modified time: 2016-04-25 22:24:43
+# @Last Modified time: 2016-04-25 22:53:22
 
 import unittest
 from pprint import pprint
@@ -52,9 +52,16 @@ class ModelTestCase(unittest.TestCase):
         for invoice in invoices:
             self.assertIsInstance(invoice, conbiller_project.ConBillInvoiceMapper)
             d = conbiller_project.ConBillInvoice(invoice)
-
             self.db.session.add(d)
             self.db.session.commit()
+
+            for prod in invoice.products:
+                p = conbiller_project.ConBillProduct(prod)
+                p.conbillinvoice_id = d.id
+                print p.conbillinvoice_id
+
+                self.db.session.add(p)
+                self.db.session.commit()
 
 
 
