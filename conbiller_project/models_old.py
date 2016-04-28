@@ -30,7 +30,7 @@ class ConBillProductMapper(dicto):
         self.each_price = float('{0}.{1}'\
             .format(self.line[107:112], self.line[112:114]))
         self.brand_id = self.line[138:142]
-        self.pack_id = self.line[147:152]
+        self.pack_id = self.line[148:152]
 
     @property
     def total_line_price(self):

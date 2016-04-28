@@ -33,17 +33,19 @@ class ConBillProduct(Base):
 
     def export(self):
         bill_price = int()
-        if self.each_price == self.cbprice:
-            # print 'both equal'
+        if self.conbillinvoice.major_cust_code == 375:
+            if self.each_price == self.cbprice:
+                # print 'both equal'
+                bill_price = self.each_price
+            elif self.each_price != self.cbprice and self.cbprice != 0.0:
+                # print 'not equal auth'
+                # print self.cbprice
+                bill_price = self.cbprice
+            elif self.each_price != self.cbprice and self.cbprice == 0.0:
+                # print 'not equal not auth'
+                bill_price = self.each_price
+        else:
             bill_price = self.each_price
-        elif self.each_price != self.cbprice and self.cbprice != 0.0:
-            # print 'not equal auth'
-            # print self.cbprice
-            bill_price = self.cbprice
-        elif self.each_price != self.cbprice and self.cbprice == 0.0:
-            # print 'not equal not auth'
-            bill_price = self.each_price
-
         bill_price = '{0:.2f}'.format(bill_price)
         # print 'formatted:', bill_price
         bill_price = str(bill_price).replace('.', '').zfill(7)
@@ -118,7 +120,7 @@ product_line_template = """{self.conbillinvoice.pepsi_div_id:5}\
 {bill_price}\
 000000000000000000000000\
 {self.brand_id:04}\
-0000000\
-{self.pack_id:0<4}\
-00000000000000000000000000000000000000000000000\
+000000\
+{self.pack_id:0>4}\
+000000000000000000000000000000000000000000000000\
                               """
